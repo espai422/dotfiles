@@ -1,0 +1,62 @@
+{
+    "editor.fontSize": 22,
+    "window.zoomLevel": 1,
+    "window.titleBarStyle": "custom",
+    "workbench.colorTheme": "One Dark Pro",
+    "editor.fontFamily": "agave Nerd Font",
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.cursorWidth": 2,
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.productIconTheme": "material-product-icons",
+    "bracket-pair-colorizer-2.depreciation-notice": false,
+
+    // Vim
+    "vim.useSystemClipboard": true,
+    "vim.smartRelativeLine": true,
+
+    // insert mode
+    "vim.insertModeKeyBindings": [
+      // In insert mode kj or jk to escape
+      {
+        "before": ["k", "j"],
+        "after": ["<Esc>"]
+      },
+
+      {
+        "before": ["j","k"],
+        "after":["<Esc>"],
+      },
+
+    ],
+    // Normal Mode
+	  // "vim.normalModeKeyBindings": [
+    //   {
+    //     "before":[],
+    //     "after":[]
+    //   }
+    // ],
+    "vim.visualModeKeyBindings": [],
+
+    // Ignore vim keys and use vscode shortcuts
+    "vim.handleKeys": {
+      // Select all
+      "<C-a>": false,
+      // VS Code search in file
+      "<C-f>": false,
+      // VS Code new marker @ next occurence
+      "<C-d>": false,
+      // Copy
+      "<C-c>": false,
+      // Cut
+      "<C-x>": false,
+      // Paste
+      "<C-v>": false,
+      // Open File Bar
+      "<C-b>": false,
+      // go back
+      "<C-z>": false,
+      "<C-Z>": false, 
+    // just Tab
+      "<C-E>": false,
+    }, 
+}

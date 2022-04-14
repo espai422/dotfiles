@@ -1,0 +1,9 @@
+*
+!.gitignore
+!README.md
+
+# code
+!Code
+!Code/User
+!Code/User/settings.json
+!Code/User/keybindings.json

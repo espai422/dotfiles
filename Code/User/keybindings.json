@@ -1,0 +1,55 @@
+// Coloque sus atajos de teclado en este archivo para sobreescribir los valores predeterminados
+[
+
+//////////////////////// VISUAL MODES ///////////////////////
+
+{ // coment and uncommnet block of lines 
+    "key": "alt+c",
+    "command":"editor.action.addCommentLine",
+    "when": "vim.mode == 'Visual' || vim.mode == 'VisualBlock' || vim.mode == 'VisualLine'",
+},
+{
+    "key":"alt+u",
+    "command":"editor.action.removeCommentLine",
+    "when": "vim.mode == 'Visual' || vim.mode == 'VisualBlock' || vim.mode == 'VisualLine'",
+},
+{ // Move block of text up and down
+    "key":"alt+k",
+    "command":"editor.action.moveLinesUpAction",
+    "when": "vim.mode == 'Visual' || vim.mode == 'VisualBlock' || vim.mode == 'VisualLine'",
+},
+{ 
+    "key":"alt+j",
+    "command":"editor.action.moveLinesDownAction",
+    "when": "vim.mode == 'Visual' || vim.mode == 'VisualBlock' || vim.mode == 'VisualLine'",
+},
+{ 
+    "key":"alt+h",
+    "command":"outdent",
+    "when": "vim.mode == 'Visual' || vim.mode == 'VisualBlock' || vim.mode == 'VisualLine'",
+},
+{ 
+    "key":"alt+l",
+    "command":"tab",
+    "when": "vim.mode == 'Visual' || vim.mode == 'VisualBlock' || vim.mode == 'VisualLine'",
+},
+
+/////////////////// Normal Mode /////////////////////////
+
+{ // Multicursors
+    "key":"alt+k",
+    "command":"editor.action.insertCursorAbove",
+    "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
+},
+{ 
+    "key":"alt+j",
+    "command":"editor.action.insertCursorBelow",
+    "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
+},
+// {
+//     "key":"",
+//     "command":"",
+//     "when": ""
+// }
+
+]
