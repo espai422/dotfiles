@@ -46,6 +46,10 @@
     "command":"editor.action.insertCursorBelow",
     "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
 },
+
+// TODO: control+z , control+shift+z, control+h, control+shift+h,
+// TODO: File Explorer, Git, 
+
 // {
 //     "key":"",
 //     "command":"",

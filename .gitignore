@@ -7,3 +7,16 @@
 !Code/User
 !Code/User/settings.json
 !Code/User/keybindings.json
+!Code/User/extensions.json
+
+
+# Installer
+!installer.py
+!install_scripts
+!install_scripts/*
+install_scripts/__pycache__
+
+# Backup
+!backup.py
+!backup_scripts
+!backup_scripts/*
