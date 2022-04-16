@@ -33,8 +33,13 @@
     "command":"tab",
     "when": "vim.mode == 'Visual' || vim.mode == 'VisualBlock' || vim.mode == 'VisualLine'",
 },
+// {
+//     "key": "y",
+//     "when": "vim.mode == 'Visual' || vim.mode == 'VisualBlock' || vim.mode == 'VisualLine'",
+//     "command": "editor.action.clipboardCopyAction"
+// },
 
-/////////////////// Normal Mode /////////////////////////
+/////////////////// Normal Mode && Insert Mode /////////////////////////
 
 { // Multicursors
     "key":"alt+k",
@@ -47,7 +52,53 @@
     "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
 },
 
-// TODO: control+z , control+shift+z, control+h, control+shift+h,
+{
+    "key": "ctrl+h",
+    "command": "editor.action.startFindReplaceAction",
+    "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
+},
+
+{
+    "key": "alt+h",
+    "command": "editor.action.startFindReplaceAction",
+    "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
+},
+
+{
+    "key": "alt+shift+h",
+    "command": "workbench.action.replaceInFiles",
+    "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
+},
+
+{
+    "key": "alt+e",
+    "command": "workbench.view.explorer",
+    "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
+},
+//////////////// Normal Mode //////////////
+
+{
+    "key": "u",
+    "when": "vim.mode == 'Normal'",
+    "command": "undo",
+},
+
+{
+    "key": "alt+u",
+    "when": "vim.mode == 'Normal'",
+    "command": "redo"
+},
+/////////////// Always /////////////
+
+{
+    "key": "ctrl+z",
+    "command": "undo",
+},
+
+{
+    "key": "ctrl+shift+z",
+    "command": "redo"
+},
 // TODO: File Explorer, Git, 
 
 // {
