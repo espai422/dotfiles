@@ -1,4 +1,6 @@
 // Coloque sus atajos de teclado en este archivo para sobreescribir los valores predeterminados
+// TODO: switch with multiple tabs, next recomendation with alt j k  
+
 [
 
 //////////////////////// VISUAL MODES ///////////////////////
@@ -51,14 +53,13 @@
     "command":"editor.action.insertCursorBelow",
     "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
 },
-
+    // Replace modes
 {
     "key": "ctrl+h",
     "command": "editor.action.startFindReplaceAction",
     "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
 },
-
-{
+{   
     "key": "alt+h",
     "command": "editor.action.startFindReplaceAction",
     "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
@@ -69,10 +70,16 @@
     "command": "workbench.action.replaceInFiles",
     "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
 },
-
+    // view file explorer
 {
     "key": "alt+e",
     "command": "workbench.view.explorer",
+    "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
+},
+    // show git control
+{
+    "key": "alt+g",
+    "command": "workbench.view.scm",
     "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
 },
 //////////////// Normal Mode //////////////
@@ -99,7 +106,6 @@
     "key": "ctrl+shift+z",
     "command": "redo"
 },
-// TODO: File Explorer, Git, 
 
 // {
 //     "key":"",
