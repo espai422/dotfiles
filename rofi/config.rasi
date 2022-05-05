@@ -1,0 +1,9 @@
+/** Basic config file **/
+
+configuration {
+  show-icons:         true;
+  icon-theme:         "Papirus";
+}
+//@theme "/usr/share/rofi/themes/ArcoLinux-Darkish.rasi"
+//@theme "/usr/share/rofi/themes/onedark.rasi"
+@theme "/usr/share/rofi/themes/espai422.rasi"

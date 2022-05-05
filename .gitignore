@@ -23,8 +23,7 @@ install_scripts/__pycache__
 
 # Rofi
 !rofi
-!rofi/themes
-!rofi/themes/onedark.rasi
+!rofi/*
 
 # Alacritty
 !alacritty
