@@ -1,0 +1,40 @@
+colors:
+  bright:
+    black: '0x434758'
+    blue: '0x9cc4ff'
+    cyan: '0xa3f7ff'
+    green: '0xddffa7'
+    magenta: '0xe1acff'
+    red: '0xff8b92'
+    white: '0xffffff'
+    yellow: '0xffe585'
+  normal:
+    black: '0x101010'
+    blue: '0x82aaff'
+    cyan: '0x89ddff'
+    green: '0xc3e88d'
+    magenta: '0xc792ea'
+    red: '0xf07178'
+    white: '0xd0d0d0'
+    yellow: '0xffcb6b'
+  primary:
+    background: '0x292d3e'
+    foreground: '0xbbc5ff'
+cursor:
+  style:
+    blinking: Always
+    shape: Beam
+  blink_interval: 750
+font:
+  bold:
+    family: Caskaydia Cove Nerd Font
+  italic:
+    family: Caskaydia Cove Nerd Font
+  normal:
+    family: Caskaydia Cove Nerd Font
+    style: Regular
+  size: 13
+window:
+  padding:
+    x: 2
+  opacity: 0.85
