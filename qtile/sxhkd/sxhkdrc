@@ -1,0 +1,94 @@
+#Rofi
+super + m
+    rofi -show drun
+
+#Browser
+super + b
+    firefox
+
+#arcolinux-logout
+super + x
+    arcolinux-logout
+
+
+#Pavucontrol
+super + v
+    pavucontrol
+
+
+#alacritty
+super + Return
+    alacritty
+
+#File-Manager
+super + shift + Return
+	thunar
+
+
+#dmenu
+super + shift + d
+	dmenu_run -i -nb '#191919' -nf '#fea63c' -sb '#fea63c' -sf '#191919' -fn 'NotoMonoRegular:bold:pixelsize=14'
+
+#reload sxhkd:
+super + shift + s
+	pkill -USR1 -x sxhkd
+
+
+#arcolinux-tweak-tool
+ctrl + alt + e
+    arcolinux-tweak-tool
+
+
+#Nitrogen
+ctrl + alt + i
+     nitrogen
+
+# Visual studio code
+super + c
+    code
+
+#arcolinux-logout
+super + l
+    arcolinux-logout
+
+
+#screeenshooter
+ctrl + Print
+     xfce4-screenshooter
+
+#Raises volume
+XF86AudioRaiseVolume
+    amixer set Master 10%+
+
+#Lowers volume
+XF86AudioLowerVolume
+    amixer set Master 10%-
+
+#Mute
+XF86AudioMute
+    amixer -D pulse set Master 1+ toggle
+
+
+#PLAY
+XF86AudioPlay
+    playerctl play-pause
+
+#Next
+XF86AudioNext
+    playerctl next
+
+#previous
+XF86AudioPrev
+    playerctl previous
+
+#Stop
+XF86AudioStop
+    playerctl stop
+
+#Brightness up
+XF86MonBrightnessUp
+    xbacklight -inc 10
+
+#Brightness down
+XF86MonBrightnessDown
+    xbacklight -dec 10

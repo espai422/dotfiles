@@ -9,5 +9,6 @@ alias tree "exa -T"
 alias 100%hacker "neofetch" &
 
 alias cat "bat --theme ansi -f --paging=never"
+alias bruh "echo 'mega bruh'"
 
 

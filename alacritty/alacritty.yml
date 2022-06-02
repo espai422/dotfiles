@@ -27,14 +27,16 @@ cursor:
   blink_interval: 750
 font:
   bold:
-    family: Caskaydia Cove Nerd Font
+    family: 
+      CodeNewRoman Nerd Font
   italic:
-    family: Caskaydia Cove Nerd Font
+    family: CodeNewRoman Nerd Font
   normal:
-    family: Caskaydia Cove Nerd Font
+    family: CodeNewRoman Nerd Font
     style: Regular
   size: 13
 window:
   padding:
-    x: 2
-  opacity: 0.85
+    x: 5
+    y: 5
+  opacity: 0.8

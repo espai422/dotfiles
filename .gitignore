@@ -33,7 +33,11 @@ install_scripts/__pycache__
 !fish
 !fish/*
 
-
+# qtile
+!qtile
+!qtile/*
+!qtile/scripts/auto*
+!qtile/sxhkd/sxhkdrc
 
 
 
