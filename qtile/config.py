@@ -25,6 +25,8 @@
 # SOFTWARE.
 
 
+from libqtile.widget import base
+from locale import currency
 import os
 import re
 import socket
@@ -34,7 +36,136 @@ from libqtile import layout, bar, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, Rule
 from libqtile.command import lazy
 from libqtile.widget import Spacer
+import netifaces
+import pyperclip as clipboard
+import psutil
 #import arcobattery
+
+class NetInterfaces():
+
+    def __init__(self):
+        self.refresh_interfaces()
+        
+        self.index = 0
+        self.interfaces_len = len(self.interfaces)
+        # print(self.interfaces)
+        # print(self.addrs)
+
+    def refresh_interfaces(self):
+        self.addrs = [netifaces.ifaddresses(addrs)[2][0]['addr'] for addrs in netifaces.interfaces()]
+        self.addrs.remove('127.0.0.1')
+
+        self.interfaces = netifaces.interfaces()
+        self.interfaces.remove('lo')
+
+# A copy method to copy the ip addr to clipboard when widget is clicked 
+
+    def next_interface(self):
+        if self.index >= self.interfaces_len:
+            self.refresh_interfaces()
+            self.index = 0
+        
+        interface = self.interfaces[self.index][0:4]
+        self.addr = self.addrs[self.index]
+
+        self.index += 1
+
+        return F'{interface}: {self.addr}'
+
+    def addr_to_clipboard(self):
+        clipboard.copy(self.addr)
+
+
+class Batter_widget(base.InLoopPollText):
+
+    def __init__(self, **config):
+        self.icons = ['','','','','','']
+        self.icons.reverse()
+        self.charge_icon = ''
+        self.battery_colors = {
+            'red': ['#e06c75','#e06c75'],
+            'orange': ['#d19a66','#d19a66'], 
+            'green': ['#98c379','#98c379']
+        }
+        self.battery = psutil.sensors_battery()
+        self.update_battery()
+
+        base.InLoopPollText.__init__(self,'', **config)
+
+    def get_battery_icon(self):
+        total_icons = len(self.icons) -1
+        index = (self.percent * total_icons) // 100
+        return self.icons[index]
+
+    def get_color(self):
+        pass
+
+    # def isCharging(self):
+    #     pass
+
+    def update_battery(self):
+        self.plugged = self.battery.power_plugged
+        self.percent = int(self.battery.percent)
+
+    def poll(self):
+        # Update Battery
+        self.update_battery()
+        if self.percent > 25:
+            self.background = self.color1
+        
+        elif self.percent < 10:
+            self.background = self.color3
+
+        else:
+            self.background = self.color2
+        # Create formated string with battery icon and lightinig checking if is charging = True
+        # Change foreground color with get color
+            # self.foreground = new color
+        # Change update_interval to create a kind of alarm
+        icon = self.get_battery_icon()
+        return icon
+
+class colorChange(base.InLoopPollText):
+
+    def __init__(self, **config):
+        self.battery = psutil.sensors_battery()
+        base.InLoopPollText.__init__(self, **config)
+    
+    def poll(self):
+        percent = self.battery.percent
+        if percent > 25:
+            self.foreground = self.color1
+            return self.icon
+        
+        elif percent < 10:
+            self.foreground = self.color3
+            return self.icon
+
+        else:
+            self.foreground = self.color2
+            return self.icon
+
+class BatteryPercent(base.InLoopPollText):
+
+    def __init__(self, **config):
+        self.battery = psutil.sensors_battery()
+        base.InLoopPollText.__init__(self, **config)
+    
+    def poll(self):
+        percent = self.battery.percent
+        if percent > 25:
+            self.background = self.color1
+            return str(int(percent))
+        
+        elif percent < 10:
+            self.background = self.color3
+            return str(int(percent))
+
+        else:
+            self.background = self.color2
+            return str(int(percent))
+
+Interfaces = NetInterfaces()
 
 #mod4 or mod = super key
 mod = "mod4"
@@ -190,12 +321,12 @@ group_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",]
 #group_names = ["ampersand", "eacute", "quotedbl", "apostrophe", "parenleft", "section", "egrave", "exclam", "ccedilla", "agrave",]
 
 #group_labels = ["1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 ", "0",]
-#       﫜  ךּ    ﴮ  ﰆ  
+'          ךּ    ﴮ  ﰆ   '
 group_labels = ["", "", "", "", "", "", "", "", "", "",]
 #group_labels = ["Web", "Edit/chat", "Image", "Gimp", "Meld", "Video", "Vb", "Files", "Mail", "Music",]
-group_labels = ['﫜','﫜','﫜','﫜','﫜','﫜','﫜','﫜','﫜','﫜']
+group_labels = [' ',' ',' ',' ',' ',' ',' ',' ',' ','']
 
-group_layouts = ["monadtall", "monadtall", "monadtall", "monadtall", "monadtall", "monadtall", "monadtall", "monadtall", "monadtall", "monadtall",]
+group_layouts = ["monadtall", "monadtall", "monadtall", "monadtall", "monadtall","monadtall", "monadtall", "monadtall", "monadtall", "monadtall",]
 #group_layouts = ["monadtall", "matrix", "monadtall", "bsp", "monadtall", "matrix", "monadtall", "bsp", "monadtall", "monadtall",]
 
 for i in range(len(group_names)):
@@ -232,7 +363,6 @@ def init_layout_theme():
 
 layout_theme = init_layout_theme()
 
-
 layouts = [
     layout.MonadTall(margin=8, border_width=2, border_focus="#5e81ac", border_normal="#4c566a"),
     layout.MonadWide(margin=8, border_width=2, border_focus="#5e81ac", border_normal="#4c566a"),
@@ -255,203 +385,299 @@ def init_colors():
             ["#cd1f3f", "#cd1f3f"], # color 6
             ["#62FF00", "#62FF00"], # color 7
             ["#6790eb", "#6790eb"], # color 8
-            ["#a9a9a9", "#a9a9a9"]] # color 9
-
-
+            ["#a9a9a9", "#a9a9a9"], # color 9
+            ["#f6f7f8", "#f6f7f8"], # color 10 *
+            ["#878787", "#878787"], # color 11 *
+            ["#1F242F", "#1F242F"], # color 12 *
+    ]
+# Vscode Ondedark 
+onedark = {
+    'selected line': ['#2c313c','#2c313c'],
+    'comment':['#767b85','#767b85'], #comment
+    'inactive':  ['#6e7179','#6e7179'], #inactive
+    'background':  ['#282c34','#282c34'], #background
+    'dark background':  ['#21252b','#21252b'], #Dark background
+    'active':  ['#d7dae0','#d7dae0'], # Selected section
+    'purple':  ['#c678dd','#c678dd'], 
+    'yellow':  ['#e5c07b','#e5c07b'],
+    'red':  ['#e06c75','#e06c75'],
+    'blue':  ['#61afef','#61afef'],
+    'green':  ['#98c379','#98c379'], 
+    'orange':  ['#d19a66','#d19a66'],
+}
 colors = init_colors()
 
 
 # WIDGETS FOR THE BAR
 
 def init_widgets_defaults():
-    return dict(font="Noto Sans",
-                fontsize = 12,
+    return dict(font="Noto Sans Bold",
+                fontsize = 16,
                 padding = 2,
-                background=colors[1])
+                background=onedark['background'])
 
 widget_defaults = init_widgets_defaults()
 
 def init_widgets_list():
     prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
     widgets_list = [
+            #    widget.Sep(
+            #             linewidth = 2,
+            #             padding = 10,
+            #             foreground = onedark['orange'],
+            #             background = onedark['background']
+            #             ),
+               widget.CurrentLayout(
+                        font = "Noto Sans Bold",
+                        background = onedark['background'],
+                        foreground = onedark['active'],
+                        padding = 9,
+                        fontsize= 16
+                        ),
+                widget.TextBox(
+                    text = '',
+                    fontsize=40,
+                    padding= -3,
+                    foreground = onedark['background'],
+                    background = onedark['red'],
+                ),
+            #    widget.Sep(
+            #             linewidth = 2,
+            #             padding = 10,
+            #             foreground = onedark['orange'],
+            #             background = onedark['background']
+            #             ),
+            # TODO Replace this widget for real ip widget 
+               widget.GenPollText(
+                        font="Noto Sans Bold",
+                        func = Interfaces.next_interface,
+                        background =onedark['red'],
+                        foreground=onedark['background'],
+                        padding = 5,
+                        fontsize=16,
+                        update_interval = 5,
+                        mouse_callbacks = {
+                            'Button1': lambda: Interfaces.addr_to_clipboard(),
+                        }
+
+                        ), # 
+                widget.TextBox(
+                    text = '',
+                    fontsize=40,
+                    padding= -3,
+                    foreground = onedark['red'],
+                    background = onedark['background'],
+                ),
+                widget.TextBox(
+                    text = '',
+                    fontsize=35,
+                    padding=4,
+                    foreground = onedark['active'],
+                    background = onedark['background'],
+                ),
+                widget.TextBox(
+                    text = '',
+                    fontsize=40,
+                    padding= -3,
+                    foreground = onedark['background'],
+                    background = onedark['yellow'],
+                ),
+                widget.CryptoTicker( # 
+                    currency = 'EUR',
+                    crypto = 'BTC',
+                    format = '{amount:.2f} {symbol}',
+                    symbol = '€',
+                    background =onedark['yellow'],
+                    foreground=onedark['background'],
+                ),
+                widget.TextBox(
+                    text = '',
+                    fontsize=40,
+                    padding= -3,
+                    foreground = onedark['yellow'],
+                    background = onedark['background'],
+                ),
+                widget.TextBox(
+                    padding = 7,
+                    text = '',
+                    fontsize=40,
+                    background = onedark['background'],
+                    foreground = onedark['active']
+                ),
+                widget.TextBox(
+                    text = '',
+                    fontsize=40,
+                    padding= -3,
+                    foreground = onedark['background'],
+                    background = onedark['purple'],
+                ),
+                widget.ThermalSensor(
+                    font='Noto Sans Bold',
+                    foreground=onedark['background'],
+                    background=onedark['purple'],
+                ),
+            #    widget.Clipboard(
+            #         font='Noto Sans Bold',
+            #         foreground=onedark['background'],
+            #         background=onedark['purple'],
+            #         #fmt='CP: {}',
+            #         fontsize= 16,
+            #         max_chars= 45,
+            #         max_width=60,
+            #         timeout= 100,
+            #    ),
+                widget.TextBox(
+                    text = '',
+                    fontsize=40,
+                    padding= -3,
+                    foreground = onedark['purple'],
+                    background = onedark['background'],
+                ),
+               widget.Spacer(
+                        background = onedark['background']
+                        ),
+                widget.TextBox(
+                        font="FontAwesome",
+                        text="",
+                        foreground=onedark['background'],
+                        background=onedark['dark background'],
+                        padding = 0,
+                        fontsize=40 
+                        ),
                widget.GroupBox(font="FontAwesome",
-                        fontsize = 16,
-                        margin_y = -1,
+                        fontsize = 21, # 16
+                        margin_y = 2,
                         margin_x = 0,
-                        padding_y = 6,
+                        padding_y = 0,
                         padding_x = 5,
                         borderwidth = 0,
                         disable_drag = True,
-                        active = colors[9],
-                        inactive = colors[5],
+                        active = onedark['active'],
+                        inactive = onedark['inactive'],
                         rounded = False,
                         highlight_method = "text",
-                        this_current_screen_border = colors[8],
-                        foreground = colors[2],
-                        background = colors[1]
+                        this_current_screen_border = onedark['purple'],
+                        foreground = onedark['active'],
+                        background = onedark['dark background']
                         ),
-               widget.Sep(
-                        linewidth = 1,
-                        padding = 10,
-                        foreground = colors[2],
-                        background = colors[1]
-                        ),
-               widget.CurrentLayout(
-                        font = "Noto Sans Bold",
-                        foreground = colors[5],
-                        background = colors[1]
-                        ),
-               widget.Sep(
-                        linewidth = 1,
-                        padding = 10,
-                        foreground = colors[2],
-                        background = colors[1]
-                        ),
-               widget.WindowName(font="Noto Sans",
-                        fontsize = 12,
-                        foreground = colors[5],
-                        background = colors[1],
-                        ),
-               widget.Net(
-                        font="Noto Sans",
-                        fontsize=12,
-                        interface="enp0s31f6",
-                        foreground=colors[2],
-                        background=colors[1],
+              widget.TextBox(
+                        font="FontAwesome",
+                        text="",
+                        foreground=onedark['background'],
+                        background=onedark['dark background'],
                         padding = 0,
+                        fontsize=40
                         ),
-               widget.Sep(
-                        linewidth = 1,
-                        padding = 10,
-                        foreground = colors[2],
-                        background = colors[1]
+                
+               widget.Spacer(
+                        background = onedark['background']
                         ),
-               widget.NetGraph(
-                        font="Noto Sans",
-                        fontsize=12,
-                        bandwidth="down",
-                        interface="auto",
-                        fill_color = colors[8],
-                        foreground=colors[2],
-                        background=colors[1],
-                        graph_color = colors[8],
-                        border_color = colors[2],
-                        padding = 0,
-                        border_width = 1,
-                        line_width = 1,
-                        ),
-               widget.Sep(
-                        linewidth = 1,
-                        padding = 10,
-                        foreground = colors[2],
-                        background = colors[1]
-                        ),
-               # do not activate in Virtualbox - will break qtile
-               widget.ThermalSensor(
-                        foreground = colors[5],
-                        foreground_alert = colors[6],
-                        background = colors[1],
-                        metric = True,
-                        padding = 3,
-                        threshold = 80
-                        ),
-               # battery option 1  ArcoLinux Horizontal icons do not forget to import arcobattery at the top
-               widget.Sep(
-                        linewidth = 1,
-                        padding = 10,
-                        foreground = colors[2],
-                        background = colors[1]
-                        ),
-            #    arcobattery.BatteryIcon(
-            #             padding=0,
-            #             scale=0.7,
-            #             y_poss=2,
-            #             theme_path=home + "/.config/qtile/icons/battery_icons_horiz",
-            #             update_interval = 5,
-            #             background = colors[1]
+            #    widget.WindowName(font="Noto Sans Bold",
+            #             fontsize = 16,
+            #             foreground = onedark['active'],
+            #             background = onedark['background'],
             #             ),
                # battery option 2  from Qtile
-               widget.Sep(
-                        linewidth = 1,
-                        padding = 10,
-                        foreground = colors[2],
-                        background = colors[1]
+                # batteryIcon
+                colorChange(
+                    foreground= onedark["active"],
+                    icon = '',
+                    color1 = onedark['green'],
+                    color2 = onedark['yellow'],
+                    color3 = onedark['red'],
+                    background = onedark['background'],
+                    fontsize = 40,
+                    update_interval = 5
+                    #text = 'hola'
+                ),
+                Batter_widget(
+                    fontsize=40,
+                    update_interval = 5,
+                    padding= 5,
+                    background= onedark['green'],
+                    color1 = onedark['green'],
+                    color2 = onedark['yellow'],
+                    color3 = onedark['red'],
+                    foreground= onedark['background']
+                ),
+                
+            #    widget.TextBox(
+            #             font="FontAwesome",
+            #             #text="",
+            #             text='',
+            #             foreground=onedark['green'],
+            #             background=onedark['background'],
+            #             padding = 5,
+            #             fontsize=20
+            #             ), # 
+                BatteryPercent(
+                        font="Noto Sans Bold",
+                        update_interval = 5,
+                        fontsize = 16,
+                        foreground = onedark['background'],
+                        background = onedark['green'],
+                        color1 = onedark['green'],
+                        color2 = onedark['yellow'],
+                        color3 = onedark['red'],
+                ),
+            #    widget.Battery(
+            #             font="Noto Sans Bold",
+            #             update_interval = 10,
+            #             fontsize = 16,
+            #             foreground = onedark['background'],
+            #             background = onedark['purple'],
+            #             format='{percent:2.0%}'
+	        #     ),
+                colorChange(
+                    background= onedark["background"],
+                    icon = '',
+                    color1 = onedark['green'],
+                    color2 = onedark['yellow'],
+                    color3 = onedark['red'],
+                    fontsize = 40,
+                    padding= 0,
+                    update_interval = 5,
+                    #text = 'hola'
+                ),
+              widget.TextBox(
+                        font="FontAwesome",
+                        text="",
+                        foreground=onedark['blue'],
+                        background=onedark['background'],
+                        padding = 0,
+                        fontsize=40
                         ),
-               widget.Battery(
-                        font="Noto Sans",
-                        update_interval = 10,
-                        fontsize = 12,
-                        foreground = colors[5],
-                        background = colors[1],
-	                    ),
                widget.TextBox(
                         font="FontAwesome",
-                        text="  ",
-                        foreground=colors[6],
-                        background=colors[1],
-                        padding = 0,
-                        fontsize=16
-                        ),
-               widget.CPUGraph(
-                        border_color = colors[2],
-                        fill_color = colors[8],
-                        graph_color = colors[8],
-                        background=colors[1],
-                        border_width = 1,
-                        line_width = 1,
-                        core = "all",
-                        type = "box"
-                        ),
-               widget.Sep(
-                        linewidth = 1,
-                        padding = 10,
-                        foreground = colors[2],
-                        background = colors[1]
-                        ),
-               widget.TextBox(
-                        font="FontAwesome",
-                        text="  ",
-                        foreground=colors[4],
-                        background=colors[1],
-                        padding = 0,
-                        fontsize=16
-                        ),
-               widget.Memory(
-                        font="Noto Sans",
-                        format = '{MemUsed}M/{MemTotal}M',
-                        update_interval = 1,
-                        fontsize = 12,
-                        foreground = colors[5],
-                        background = colors[1],
-                       ),
-               widget.Sep(
-                        linewidth = 1,
-                        padding = 10,
-                        foreground = colors[2],
-                        background = colors[1]
-                        ),
-               widget.TextBox(
-                        font="FontAwesome",
-                        text="  ",
-                        foreground=colors[3],
-                        background=colors[1],
-                        padding = 0,
-                        fontsize=16
-                        ),
+                        text="",
+                        background=onedark['blue'],
+                        foreground=onedark['background'],
+                        padding = 5,
+                        fontsize=30
+                        ), # 
                widget.Clock(
-                        foreground = colors[5],
-                        background = colors[1],
-                        fontsize = 12,
-                        format="%Y-%m-%d %H:%M"
+                        foreground = onedark['background'],
+                        background = onedark['blue'],
+                        fontsize = 16,
+                        #format="%Y-%m-%d %H:%M"
+                        format="%H:%M"
                         ),
-               widget.Sep(
-                        linewidth = 1,
-                        padding = 10,
-                        foreground = colors[2],
-                        background = colors[1]
+              widget.TextBox(
+                        font="FontAwesome",
+                        text="",
+                        foreground=onedark['background'],
+                        background=onedark['blue'],
+                        padding = 0,
+                        fontsize=40
                         ),
+            #    widget.Sep(
+            #             linewidth = 2,
+            #             padding = 10,
+            #             foreground = onedark['orange'],
+            #             background = onedark['background']
+            #             ),
                widget.Systray(
-                        background=colors[1],
+                        background=onedark['background'],
                         icon_size=20,
                         padding = 4
                         ),
@@ -474,7 +700,7 @@ widgets_screen2 = init_widgets_screen2()
 
 
 def init_screens():
-    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=26, opacity=0.8)),
+    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=26, opacity=1)),
             Screen(top=bar.Bar(widgets=init_widgets_screen2(), size=26, opacity=0.8))]
 screens = init_screens()
 
