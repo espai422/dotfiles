@@ -1,6 +1,5 @@
 {
     "editor.fontSize": 22,
-    "window.zoomLevel": 1,
     "window.titleBarStyle": "custom",
     "workbench.colorTheme": "One Dark Pro",
     "editor.fontFamily": "Agave Nerd Font",
@@ -60,5 +59,7 @@
       "<C-E>": false,
     },
     "workbench.startupEditor": "none",
+    "window.zoomLevel": 1,
+    "languageTool.language":"en"
     
 }

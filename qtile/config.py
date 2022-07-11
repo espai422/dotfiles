@@ -65,15 +65,18 @@ class NetInterfaces():
             self.refresh_interfaces()
             self.index = 0
         
-        interface = self.interfaces[self.index][0:4]
-        self.addr = self.addrs[self.index]
+        try:
+            interface = self.interfaces[self.index][0:4]
+            self.addr = self.addrs[self.index]
+        except:
+            return 'OFFLINE'
 
         self.index += 1
 
         return F'{interface}: {self.addr}'
 
     def addr_to_clipboard(self):
-        clipboard.copy(self.addr)
+        clipboard.copy(str(self.addr))
 
 
 class Batter_widget(base.InLoopPollText):
@@ -458,6 +461,7 @@ def init_widgets_list():
                         update_interval = 5,
                         mouse_callbacks = {
                             'Button1': lambda: Interfaces.addr_to_clipboard(),
+                            
                         }
 
                         ), # 
@@ -579,66 +583,89 @@ def init_widgets_list():
             #             ),
                # battery option 2  from Qtile
                 # batteryIcon
-                colorChange(
-                    foreground= onedark["active"],
-                    icon = '',
-                    color1 = onedark['green'],
-                    color2 = onedark['yellow'],
-                    color3 = onedark['red'],
-                    background = onedark['background'],
-                    fontsize = 40,
-                    update_interval = 5
-                    #text = 'hola'
-                ),
-                Batter_widget(
-                    fontsize=40,
-                    update_interval = 5,
-                    padding= 5,
-                    background= onedark['green'],
-                    color1 = onedark['green'],
-                    color2 = onedark['yellow'],
-                    color3 = onedark['red'],
-                    foreground= onedark['background']
-                ),
+            #     colorChange(
+            #         foreground= onedark["active"],
+            #         icon = '',
+            #         color1 = onedark['green'],
+            #         color2 = onedark['yellow'],
+            #         color3 = onedark['red'],
+            #         background = onedark['background'],
+            #         fontsize = 40,
+            #         update_interval = 5
+            #         #text = 'hola'
+            #     ),
+            #     Batter_widget(
+            #         fontsize=40,
+            #         update_interval = 5,
+            #         padding= 5,
+            #         background= onedark['green'],
+            #         color1 = onedark['green'],
+            #         color2 = onedark['yellow'],
+            #         color3 = onedark['red'],
+            #         foreground= onedark['background']
+            #     ),
                 
-            #    widget.TextBox(
-            #             font="FontAwesome",
-            #             #text="",
-            #             text='',
-            #             foreground=onedark['green'],
-            #             background=onedark['background'],
-            #             padding = 5,
-            #             fontsize=20
-            #             ), # 
-                BatteryPercent(
+              widget.TextBox(
+                        font="FontAwesome",
+                        text="",
+                        foreground=onedark['green'],
+                        background=onedark['background'],
+                        padding = 0,
+                        fontsize=40
+                        ),
+               widget.TextBox(
+                        font="FontAwesome",
+                        #text="",
+                        text='',
+                        background=onedark['green'],
+                        foreground=onedark['background'],
+                        padding = 5,
+                        fontsize=20
+                        ), # 
+            #     BatteryPercent(
+            #             font="Noto Sans Bold",
+            #             update_interval = 5,
+            #             fontsize = 16,
+            #             foreground = onedark['background'],
+            #             background = onedark['green'],
+            #             color1 = onedark['green'],
+            #             color2 = onedark['yellow'],
+            #             color3 = onedark['red'],
+            #     ),
+               widget.Battery(
                         font="Noto Sans Bold",
-                        update_interval = 5,
+                        update_interval = 10,
                         fontsize = 16,
                         foreground = onedark['background'],
                         background = onedark['green'],
-                        color1 = onedark['green'],
-                        color2 = onedark['yellow'],
-                        color3 = onedark['red'],
+                        format='{percent:2.0%}'
+	            ),
+              widget.TextBox(
+                        font="FontAwesome",
+                        text="",
+                        foreground=onedark['background'],
+                        background=onedark['green'],
+                        padding = 0,
+                        fontsize=40
+                        ),
+                widget.TextBox(
+                    padding =2,
+                    text = '',
+                    fontsize=40,
+                    background = onedark['background'],
+                    foreground = onedark['active']
                 ),
-            #    widget.Battery(
-            #             font="Noto Sans Bold",
-            #             update_interval = 10,
-            #             fontsize = 16,
-            #             foreground = onedark['background'],
-            #             background = onedark['purple'],
-            #             format='{percent:2.0%}'
-	        #     ),
-                colorChange(
-                    background= onedark["background"],
-                    icon = '',
-                    color1 = onedark['green'],
-                    color2 = onedark['yellow'],
-                    color3 = onedark['red'],
-                    fontsize = 40,
-                    padding= 0,
-                    update_interval = 5,
-                    #text = 'hola'
-                ),
+                # colorChange(
+                #     background= onedark["background"],
+                #     icon = '',
+                #     color1 = onedark['green'],
+                #     color2 = onedark['yellow'],
+                #     color3 = onedark['red'],
+                #     fontsize = 40,
+                #     padding= 0,
+                #     update_interval = 5,
+                #     #text = 'hola'
+                # ),
               widget.TextBox(
                         font="FontAwesome",
                         text="",

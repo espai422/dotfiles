@@ -28,10 +28,10 @@ if [ $keybLayout = "be" ]; then
 fi
 
 #autostart ArcoLinux Welcome App
-run dex $HOME/.config/autostart/arcolinux-welcome-app.desktop &
+# run dex $HOME/.config/autostart/arcolinux-welcome-app.desktop &
 
 #Some ways to set your wallpaper besides variety or nitrogen
-feh --bg-fill /usr/share/backgrounds/arcolinux/arco-wallpaper.jpg &
+feh --bg-fill /usr/share/backgrounds/arcolinux-candy/candy-06.jpg &
 #start the conky to learn the shortcuts
 (conky -c $HOME/.config/qtile/scripts/system-overview) &
 
@@ -46,7 +46,8 @@ run pamac-tray &
 run xfce4-power-manager &
 numlockx on &
 blueberry-tray &
-picom --config $HOME/.config/qtile/scripts/picom.conf &
+# picom --config $HOME/.config/qtile/scripts/picom.conf &
+picom &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
 
