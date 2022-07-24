@@ -82,6 +82,8 @@
     "command": "workbench.view.scm",
     "when": "vim.mode == 'Normal' || vim.mode == 'Insert'"
 },
+
+
 //////////////// Normal Mode //////////////
 
 {
@@ -106,6 +108,18 @@
     "key": "ctrl+shift+z",
     "command": "redo"
 },
+
+{
+    "key": "alt+j",
+    "command":"selectNextSuggestion", 
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+},
+{
+    "key": "alt+k",
+    "command":"selectPrevSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+}
+
 
 // {
 //     "key":"",

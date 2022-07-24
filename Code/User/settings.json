@@ -9,6 +9,14 @@
     "workbench.productIconTheme": "material-product-icons",
     "bracket-pair-colorizer-2.depreciation-notice": false,
 
+    // Integrated Terminal
+    "terminal.integrated.fontSize": 22,
+
+
+    // Tab size settings
+    "editor.detectIndentation": false,
+    "[java]": {"editor.tabSize": 2},
+
     // Vim
     "vim.useSystemClipboard": true,
     "vim.smartRelativeLine": true,
